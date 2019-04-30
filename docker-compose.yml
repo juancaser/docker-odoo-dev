@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_PASSWORD=ambotlang
+      - POSTGRES_USER=pguser
+      - POSTGRES_DB=postgres
+    volumes:
+      - ${POSTGRES_DATA_DIR-./data/postgres}:/var/lib/postgresql/data
+  odoo:
+    image: odoo:12.0
+    depends_on:
+      - db
+    ports:
+      - "8071:8069"
+    tty: true
+    command: -- --dev=reload
+#    command: odoo scaffold /mnt/extra-addons/test_module
+    volumes:
+      - ${ADDONS_DIR-./addons}:/mnt/extra-addons
+      - ${ETC_DIR-./etc}:/etc/odoo
+networks:
+  docker-net:
+    driver: bridge

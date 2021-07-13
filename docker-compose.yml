@@ -11,8 +11,14 @@ services:
       - USER=pguser
       - PASSWORD=ambotlang
       - PORT=5432
+    ports:
+      - 8069:8069/tcp
+    volumes:
+      - ./odoo/web-data:/var/lib/odoo
+      - ./odoo/config:/etc/odoo
+      - ./odoo/addons:/mnt/extra-addons
   postgres:
-    image: postgres:11
+    image: postgres:latest
     container_name: postgres
     ports:
       - "5432"
